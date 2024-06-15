@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калкулатор за ДДС</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        nav {
+            background: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: #fff;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 300px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #fff;
+            margin-top: 20px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+        }
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px; 
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">Начало</a>
+        <a href="zdss.html">Закон за ДДС</a>
+        <a href="calculator.html">Калкулатор</a>
+        <a href="#about">За нас</a>
+        <a href="#contact">Контакти</a>
+    </nav>
+    <div class="container">
+        <h2>Калкулатор за ДДС</h2>
+        <label for="amount">Въведете стойност без ДДС:</label>
+        <input type="number" id="amount" placeholder="Напр. 100">
+        
+        <label for="vatRate">Изберете процент ДДС:</label>
+        <select id="vatRate">
+            <option value="20">20%</option>
+            <option value="9">9%</option>
+        </select>
+        
+        <button onclick="calculateVAT()">Изчисли</button>
+        
+        <h3>Резултати:</h3>
+        <p id="vatAmount">Сума на ДДС: -</p>
+        <p id="totalAmount">Крайна сума със ДДС: -</p>
+
+        <button id="infoBtn">Информация за ДДС</button>
+        <button id="aboutBtn">За сайта</button>
+    </div>
+
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>В Република България (Р.Б) се прилага единна ставка на данъка върху добавената стойност (ДДС), но са предвидени различни видове ставки и облекчения в зависимост от стоките и услугите. Основните видове ДДС са:</p>
+            <p>1. <strong>Стандартна ставка</strong>: 20% - Прилага се за повечето стоки и услуги.</p>
+            <p>2. <strong>Намалена ставка</strong>: 9% - Прилага се за някои специфични стоки и услуги, включително:</p>
+            <ul>
+                <li>Настаняване в хотели и подобни заведения за краткосрочно настаняване.</li>
+                <li>Някои лекарствени продукти.</li>
+                <li>Книги, включително учебници.</li>
+            </ul>
+            <p>3. <strong>Нулева ставка</strong>: 0% - Прилага се за износ на стоки и някои специфични услуги, свързани с международния транспорт и доставките, които са освободени от данък.</p>
+            <p>4. <strong>Освободени доставки</strong>: Това са доставки, които не подлежат на облагане с ДДС. Те включват:</p>
+            <ul>
+                <li>Здравни услуги.</li>
+                <li>Образователни услуги.</li>
+                <li>Социални услуги.</li>
+                <li>Финансови и застрахователни услуги.</li>
+            </ul>
+            <p>Тези различни ставки и облекчения са установени с цел да се съобразят с икономическите и социалните нужди на страната и да се подпомогнат определени сектори.</p>
+        </div>
+    </div>
+
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Скоро...</p>
+        </div>
+    </div>
+
+    <footer>
+        2024 © ФИЛИП ЦВЕТКОВ
+    </footer>
+
+    <script>
+        function calculateVAT() {
+            var amount = parseFloat(document.getElementById('amount').value);
+            var vatRate = parseFloat(document.getElementById('vatRate').value);
+
+            if (isNaN(amount) || amount < 0) {
+                alert("Моля, въведете валидна положителна стойност.");
+                return;
+            }
+
+            var vatAmount = amount * vatRate / 100;
+            var totalAmount = amount + vatAmount;
+
+            document.getElementById('vatAmount').textContent = 'Сума на ДДС: ' + vatAmount.toFixed(2) + ' лв';
+            document.getElementById('totalAmount').textContent = 'Крайна сума със ДДС: ' + totalAmount.toFixed(2) + ' лв';
+        }
+
+        var infoModal = document.getElementById("infoModal");
+        var aboutModal = document.getElementById("aboutModal");
+        var infoBtn = document.getElementById("infoBtn");
+        var aboutBtn = document.getElementById("aboutBtn");
+        var closeButtons = document.getElementsByClassName("close");
+
+        infoBtn.onclick = function() {
+            infoModal.style.display = "block";
+        }
+
+        aboutBtn.onclick = function() {
+            aboutModal.style.display = "block";
+        }
+
+        for (var i = 0; i < closeButtons.length; i++) {
+            closeButtons[i].onclick = function() {
+                this.parentElement.parentElement.style.display = "none";
+            }
+        }
+
+        window.onclick = function(event) {
+            if (event.target == infoModal) {
+                infoModal.style.display = "none";
+            } else if (event.target == aboutModal) {
+                aboutModal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
